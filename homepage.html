@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vocabulary Master Dashboard - 8-Bit Edition</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Retro Pixel Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Retro Pixel Art Utility Classes */
+      body {
+        font-family: "Silkscreen", monospace;
+        background-color: #e5dac3;
+        color: #1a1a1a;
+        image-rendering: pixelated;
+      }
+
+      .font-pixel-heading {
+        font-family: "Press Start 2P", monospace;
+      }
+
+      /* Hard Pixel Box Shadows (No smooth blur) */
+      .pixel-box-sm {
+        box-shadow: 3px 3px 0px #000000;
+      }
+      .pixel-box-md {
+        box-shadow: 4px 4px 0px #000000;
+      }
+      .pixel-box-lg {
+        box-shadow: 6px 6px 0px #000000;
+      }
+
+      .pixel-button-active {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0px #000000 !important;
+      }
+
+      /* Custom Pixel Scrollbars */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #e5dac3;
+        border-left: 2px solid #000000;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #2f5233;
+        border: 2px solid #000000;
+      }
+
+      /* Highlight Filtered States */
+      .alphabet-card.highlight {
+        background-color: #4caf50 !important;
+        color: #ffffff !important;
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0px #000000 !important;
+      }
+
+      .alphabet-card.fade {
+        opacity: 0.3;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body class="bg-[#e5dac3] text-[#1a1a1a] min-h-screen pb-12 antialiased">
+    <!-- Top Bar Navigation Header -->
+    <header
+      class="bg-[#2f5233] text-white border-b-4 border-black px-6 py-4 pixel-box-md mb-8"
+    >
+      <div
+        class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4"
+      >
+        <div class="flex items-center gap-3">
+          <!-- Sword Retro Icon -->
+          <svg
+            class="w-8 h-8 text-[#4caf50] shrink-0"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M3 21v-2h2v-2h2v-2h2v2H7v2H5v2H3zm12-14l2-2 4 4-2 2-4-4zm-2 2l4 4-9 9H6v-2l9-9z"
+            />
+          </svg>
+          <div>
+            <h1
+              class="font-pixel-heading text-xl sm:text-2xl text-[#e5dac3] tracking-wide uppercase"
+            >
+              WORD VODAI
+            </h1>
+            <p class="text-xs text-[#90b293] mt-1">
+              [Word Smart 1 & Barron's 333 Quest Engine]
+            </p>
+          </div>
+        </div>
+
+        <button
+          id="themeToggle"
+          aria-label="Toggle pixel theme mode"
+          class="flex items-center gap-2 bg-[#1b331f] border-2 border-black px-4 py-2 text-xs text-[#e5dac3] hover:bg-[#3e6843] active:translate-y-1 pixel-box-sm transition-all"
+        >
+          <span id="themeIcon">🌙</span>
+          <span id="themeText">DARK MODE</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <!-- Layout Container: Left Sidebar & Main Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Left Sidebar (Stats & Navigation Controls) -->
+        <aside class="lg:col-span-1 space-y-6">
+          <!-- Player / Quest Info Panel -->
+          <div
+            class="bg-[#2f5233] text-white border-4 border-black p-5 pixel-box-md"
+          >
+            <div
+              class="flex items-center gap-3 border-b-2 border-[#48774d] pb-3 mb-4"
+            >
+              <!-- Retro Book / Scroll Icon -->
+              <svg
+                class="w-6 h-6 text-[#4caf50]"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"
+                />
+              </svg>
+              <h2 class="font-pixel-heading text-sm text-[#e5dac3]">
+                QUEST STATS
+              </h2>
+            </div>
+
+            <!-- Dashboard Stats Grid -->
+            <div class="space-y-4">
+              <div class="bg-[#1b331f] border-2 border-black p-3 pixel-box-sm">
+                <span
+                  class="text-[10px] text-[#90b293] block uppercase font-bold"
+                  >Word Smart Tracks</span
+                >
+                <span
+                  id="wsCount"
+                  class="font-pixel-heading text-lg text-[#4caf50] mt-1 block"
+                  >0</span
+                >
+              </div>
+
+              <div class="bg-[#1b331f] border-2 border-black p-3 pixel-box-sm">
+                <span
+                  class="text-[10px] text-[#90b293] block uppercase font-bold"
+                  >Barron's Tracks</span
+                >
+                <span
+                  id="baCount"
+                  class="font-pixel-heading text-lg text-[#4caf50] mt-1 block"
+                  >0</span
+                >
+              </div>
+
+              <div class="bg-[#1b331f] border-2 border-black p-3 pixel-box-sm">
+                <span
+                  class="text-[10px] text-[#90b293] block uppercase font-bold"
+                  >Total Modules</span
+                >
+                <span
+                  id="totalModules"
+                  class="font-pixel-heading text-lg text-[#e5dac3] mt-1 block"
+                  >0</span
+                >
+              </div>
+
+              <div class="bg-[#1b331f] border-2 border-black p-3 pixel-box-sm">
+                <span
+                  class="text-[10px] text-[#90b293] block uppercase font-bold"
+                  >Completion Rate</span
+                >
+                <span
+                  id="progressPercent"
+                  class="font-pixel-heading text-lg text-red-500 mt-1 block"
+                  >0%</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Navigation Actions -->
+          <div
+            class="bg-[#cbb592] border-4 border-black p-5 pixel-box-md space-y-3"
+          >
+            <h3
+              class="font-pixel-heading text-xs text-[#1a1a1a] mb-2 uppercase border-b-2 border-black pb-2"
+            >
+              FAST ACTIONS
+            </h3>
+
+            <button
+              id="actionStartWS"
+              class="w-full text-left bg-[#4caf50] text-black border-2 border-black p-3 font-bold text-xs hover:bg-[#43a047] active:translate-x-1 pixel-box-sm transition-all flex justify-between items-center"
+            >
+              <span>WS PRACTICE</span>
+              <span>➔</span>
+            </button>
+
+            <button
+              id="actionStartBA"
+              class="w-full text-left bg-[#2f5233] text-[#e5dac3] border-2 border-black p-3 font-bold text-xs hover:bg-[#3e6843] active:translate-x-1 pixel-box-sm transition-all flex justify-between items-center"
+            >
+              <span>BA PRACTICE</span>
+              <span>➔</span>
+            </button>
+
+            <button
+              id="actionContinue"
+              class="w-full text-left bg-[#e5dac3] text-black border-2 border-black p-3 text-xs hover:bg-[#d8c7a9] active:translate-x-1 pixel-box-sm transition-all"
+            >
+              <span class="block text-[9px] text-gray-700 font-bold uppercase"
+                >Resume Quest</span
+              >
+              <span id="continueText" class="font-bold block truncate"
+                >No recent session</span
+              >
+            </button>
+
+            <button
+              id="actionRandom"
+              class="w-full text-left bg-red-600 text-white border-2 border-black p-3 font-bold text-xs hover:bg-red-700 active:translate-x-1 pixel-box-sm transition-all flex justify-between items-center"
+            >
+              <span>RANDOM QUIZ</span>
+              <span>🎲</span>
+            </button>
+          </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="lg:col-span-3 space-y-8">
+          <!-- Pixel Search Bar Infrastructure -->
+          <div class="bg-[#cbb592] border-4 border-black p-4 pixel-box-md">
+            <label
+              for="searchBar"
+              class="font-pixel-heading text-xs text-black block mb-2 uppercase"
+            >
+              SEARCH MODULE [KEYBOARD INPUT]
+            </label>
+            <div class="relative">
+              <input
+                type="text"
+                id="searchBar"
+                placeholder="TYPE A LETTER (E.G., A, B, M)..."
+                class="w-full bg-[#e5dac3] border-4 border-black p-3 font-pixel-heading text-xs uppercase text-black focus:outline-none focus:bg-white placeholder-gray-600 pixel-box-sm"
+              />
+            </div>
+          </div>
+
+          <!-- Track Alpha: Word Smart Grid Card -->
+          <section class="bg-[#cbb592] border-4 border-black p-6 pixel-box-md">
+            <div
+              class="flex justify-between items-center border-b-4 border-black pb-3 mb-6"
+            >
+              <h3
+                class="font-pixel-heading text-sm text-black flex items-center gap-2"
+              >
+                <span class="text-[#2f5233]">🛡️</span> WORD SMART 1
+              </h3>
+              <span
+                class="bg-[#2f5233] text-[#e5dac3] text-[10px] px-3 py-1 font-bold border-2 border-black pixel-box-sm"
+              >
+                TRACK ALPHA
+              </span>
+            </div>
+            <!-- Dynamic Alphabet Grid -->
+            <div
+              id="wordSmartGrid"
+              class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-9 gap-3"
+            ></div>
+          </section>
+
+          <!-- Track Beta: Barron's 333 Grid Card -->
+          <section class="bg-[#cbb592] border-4 border-black p-6 pixel-box-md">
+            <div
+              class="flex justify-between items-center border-b-4 border-black pb-3 mb-6"
+            >
+              <h3
+                class="font-pixel-heading text-sm text-black flex items-center gap-2"
+              >
+                <span class="text-red-700">📜</span> BARRON'S 333
+              </h3>
+              <span
+                class="bg-red-600 text-white text-[10px] px-3 py-1 font-bold border-2 border-black pixel-box-sm"
+              >
+                TRACK BETA
+              </span>
+            </div>
+            <!-- Dynamic Alphabet Grid -->
+            <div
+              id="barronsGrid"
+              class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-9 gap-3"
+            ></div>
+          </section>
+
+          <!-- Recent Activity Log Section -->
+          <section class="bg-[#cbb592] border-4 border-black p-6 pixel-box-md">
+            <h3
+              class="font-pixel-heading text-xs text-black mb-4 uppercase border-b-2 border-black pb-2 flex items-center gap-2"
+            >
+              <span>🗡️</span> QUEST ACTIVITY LOGS
+            </h3>
+            <div id="activityLogContainer" class="space-y-3">
+              <div
+                class="empty-activity text-center py-4 text-xs italic text-gray-700 font-bold"
+              >
+                No active sessions tracked yet. Pick an alphabet above to start.
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <!-- Application Controller Logic -->
+    <script>
+      // System Configuration Object Map
+      const CONFIG = {
+        wordSmartFiles: {
+          A: "vocab_quiz_A.html",
+          B: "vocab_quiz_B.html",
+          C: "vocab_quiz_C.html",
+          D: "vocab_quiz_D.html",
+          E: "vocab_quiz_E.html",
+          F: "vocab_quiz_F.html",
+          G: "vocab_quiz_G.html",
+          H: "vocab_quiz_H.html",
+          I: "vocab_quiz_I.html",
+          J: "vocab_quiz_J.html",
+          K: "vocab_quiz_K.html",
+          L: "vocab_quiz_L.html",
+          M: "vocab_quiz_M.html",
+          N: "vocab_quiz_N.html",
+          O: "vocab_quiz_O.html",
+          P: "vocab_quiz_P.html",
+          Q: "vocab_quiz_Q.html",
+          R: "vocab_quiz_R.html",
+          S: "vocab_quiz_S.html",
+          T: "vocab_quiz_T.html",
+          U: "vocab_quiz_U.html",
+          V: "vocab_quiz_V.html",
+          W: "vocab_quiz_W.html",
+          X: "vocab_quiz_X.html",
+          Y: "vocab_quiz_Y.html",
+          Z: "vocab_quiz_Z.html",
+        },
+        barronsFiles: {
+          A: "barrons-a.html",
+          B: "barrons-b.html",
+          C: "barrons-c.html",
+          D: "barrons-d.html",
+          E: "barrons-e.html",
+          F: "barrons-f.html",
+          G: "barrons-g.html",
+          H: "barrons-h.html",
+          I: "barrons-i.html",
+          J: "barrons-j.html",
+          K: "barrons-k.html",
+          L: "barrons-l.html",
+          M: "barrons-m.html",
+          N: "barrons-n.html",
+          O: "barrons-o.html",
+          P: "barrons-p.html",
+          Q: "barrons-q.html",
+          R: "barrons-r.html",
+          S: "barrons-s.html",
+          T: "barrons-t.html",
+          U: "barrons-u.html",
+          V: "barrons-v.html",
+          W: "barrons-w.html",
+          X: "barrons-x.html",
+          Y: "barrons-y.html",
+          Z: "barrons-z.html",
+        },
+      };
+
+      // State Management
+      const STATE = {
+        theme: "light",
+        lastVisited: null,
+        totalOpenedCount: 0,
+        activityLog: [],
+      };
+
+      // Elements
+      const themeToggle = document.getElementById("themeToggle");
+      const themeIcon = document.getElementById("themeIcon");
+      const themeText = document.getElementById("themeText");
+      const searchBar = document.getElementById("searchBar");
+      const wordSmartGrid = document.getElementById("wordSmartGrid");
+      const barronsGrid = document.getElementById("barronsGrid");
+      const wsCountEl = document.getElementById("wsCount");
+      const baCountEl = document.getElementById("baCount");
+      const totalModulesEl = document.getElementById("totalModules");
+      const progressPercentEl = document.getElementById("progressPercent");
+      const continueTextEl = document.getElementById("continueText");
+      const activityLogContainer = document.getElementById(
+        "activityLogContainer",
+      );
+
+      // App Initialization
+      function init() {
+        loadLocalStorage();
+        applyTheme();
+        renderGrids();
+        calculateMetrics();
+        renderActivityLog();
+        setupEventListeners();
+      }
+
+      function loadLocalStorage() {
+        STATE.theme = localStorage.getItem("vm_theme") || "light";
+        const rawLastVisited = localStorage.getItem("vm_last_visited");
+        if (rawLastVisited) STATE.lastVisited = JSON.parse(rawLastVisited);
+
+        STATE.totalOpenedCount = parseInt(
+          localStorage.getItem("vm_total_opened") || "0",
+          10,
+        );
+
+        const rawLog = localStorage.getItem("vm_activity_log");
+        if (rawLog) STATE.activityLog = JSON.parse(rawLog);
+      }
+
+      function applyTheme() {
+        if (STATE.theme === "dark") {
+          document.body.style.backgroundColor = "#1b2a1d";
+          document.body.style.color = "#e5dac3";
+          themeIcon.textContent = "☀️";
+          themeText.textContent = "LIGHT MODE";
+        } else {
+          document.body.style.backgroundColor = "#e5dac3";
+          document.body.style.color = "#1a1a1a";
+          themeIcon.textContent = "🌙";
+          themeText.textContent = "DARK MODE";
+        }
+      }
+
+      themeToggle.addEventListener("click", () => {
+        STATE.theme = STATE.theme === "light" ? "dark" : "light";
+        localStorage.setItem("vm_theme", STATE.theme);
+        applyTheme();
+      });
+
+      // Render Interactive Grids
+      function renderGrids() {
+        // WordSmart Grid Nodes
+        wordSmartGrid.innerHTML = "";
+        Object.keys(CONFIG.wordSmartFiles).forEach((letter) => {
+          const upperLetter = letter.toUpperCase();
+          const card = document.createElement("a");
+          card.className =
+            "alphabet-card bg-[#e5dac3] border-4 border-black text-black font-pixel-heading text-center py-3 text-sm hover:bg-[#4caf50] hover:text-white transition-all pixel-box-sm active:translate-x-1 flex items-center justify-center select-none";
+          card.href = CONFIG.wordSmartFiles[letter];
+          card.textContent = upperLetter;
+          card.setAttribute("data-letter", upperLetter);
+          card.setAttribute("data-source", "Word Smart");
+          card.addEventListener("click", (e) =>
+            handleCardClick(
+              e,
+              upperLetter,
+              "Word Smart",
+              CONFIG.wordSmartFiles[letter],
+            ),
+          );
+          wordSmartGrid.appendChild(card);
+        });
+
+        // Barrons Grid Nodes
+        barronsGrid.innerHTML = "";
+        Object.keys(CONFIG.barronsFiles).forEach((letter) => {
+          const upperLetter = letter.toUpperCase();
+          const card = document.createElement("a");
+          card.className =
+            "alphabet-card bg-[#e5dac3] border-4 border-black text-black font-pixel-heading text-center py-3 text-sm hover:bg-red-600 hover:text-white transition-all pixel-box-sm active:translate-x-1 flex items-center justify-center select-none";
+          card.href = CONFIG.barronsFiles[letter];
+          card.textContent = upperLetter;
+          card.setAttribute("data-letter", upperLetter);
+          card.setAttribute("data-source", "Barrons");
+          card.addEventListener("click", (e) =>
+            handleCardClick(
+              e,
+              upperLetter,
+              "Barrons",
+              CONFIG.barronsFiles[letter],
+            ),
+          );
+          barronsGrid.appendChild(card);
+        });
+      }
+
+      function handleCardClick(event, letter, source, url) {
+        const timestamp = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const sessionObj = { letter, source, url, time: timestamp };
+
+        localStorage.setItem(
+          "vm_last_visited",
+          JSON.stringify({ letter, source, url }),
+        );
+
+        let currentCount = parseInt(
+          localStorage.getItem("vm_total_opened") || "0",
+          10,
+        );
+        localStorage.setItem("vm_total_opened", currentCount + 1);
+
+        let localHistory = [];
+        const rawLog = localStorage.getItem("vm_activity_log");
+        if (rawLog) localHistory = JSON.parse(rawLog);
+
+        localHistory.unshift(sessionObj);
+        if (localHistory.length > 10) localHistory.pop();
+        localStorage.setItem("vm_activity_log", JSON.stringify(localHistory));
+      }
+
+      function calculateMetrics() {
+        const wsSize = Object.keys(CONFIG.wordSmartFiles).length;
+        const baSize = Object.keys(CONFIG.barronsFiles).length;
+        const total = wsSize + baSize;
+
+        wsCountEl.textContent = wsSize;
+        baCountEl.textContent = baSize;
+        totalModulesEl.textContent = total;
+
+        if (STATE.activityLog.length > 0) {
+          const uniqueModules = new Set(
+            STATE.activityLog.map((item) => `${item.source}-${item.letter}`),
+          );
+          const percentage = Math.min(
+            Math.round((uniqueModules.size / total) * 100),
+            100,
+          );
+          progressPercentEl.textContent = `${percentage}%`;
+        } else {
+          progressPercentEl.textContent = "0%";
+        }
+
+        if (STATE.lastVisited) {
+          continueTextEl.textContent = `${STATE.lastVisited.source} ➔ ${STATE.lastVisited.letter}`;
+        } else {
+          continueTextEl.textContent = "No recent session";
+        }
+      }
+
+      function renderActivityLog() {
+        if (STATE.activityLog.length === 0) return;
+
+        activityLogContainer.innerHTML = "";
+        STATE.activityLog.forEach((activity) => {
+          const isWS = activity.source === "Word Smart";
+          const badgeBg = isWS ? "bg-[#2f5233]" : "bg-red-700";
+
+          const logItem = document.createElement("div");
+          logItem.className =
+            "flex items-center justify-between p-3 bg-[#e5dac3] border-2 border-black pixel-box-sm hover:translate-x-1 cursor-pointer transition-all";
+
+          logItem.innerHTML = `
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 ${badgeBg} text-white font-pixel-heading text-xs flex items-center justify-center border border-black">
+                ${activity.letter}
+              </span>
+              <div>
+                <span class="font-bold text-xs uppercase block text-black">${activity.source}</span>
+                <span class="text-[9px] text-gray-700 block">MODULE VERIFIED</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-bold text-gray-800">${activity.time}</span>
+          `;
+
+          logItem.addEventListener("click", () => {
+            window.location.href = activity.url;
+          });
+          activityLogContainer.appendChild(logItem);
+        });
+      }
+
+      function setupEventListeners() {
+        searchBar.addEventListener("input", (e) => {
+          const query = e.target.value.trim().toUpperCase();
+          const cards = document.querySelectorAll(".alphabet-card");
+
+          if (query === "") {
+            cards.forEach((card) => {
+              card.classList.remove("highlight", "fade");
+            });
+            return;
+          }
+
+          cards.forEach((card) => {
+            const letter = card.getAttribute("data-letter");
+            if (letter === query) {
+              card.classList.add("highlight");
+              card.classList.remove("fade");
+            } else {
+              card.classList.add("fade");
+              card.classList.remove("highlight");
+            }
+          });
+        });
+
+        document
+          .getElementById("actionStartWS")
+          .addEventListener("click", () => {
+            const keys = Object.keys(CONFIG.wordSmartFiles);
+            if (keys.length > 0)
+              window.location.href = CONFIG.wordSmartFiles[keys[0]];
+          });
+
+        document
+          .getElementById("actionStartBA")
+          .addEventListener("click", () => {
+            const keys = Object.keys(CONFIG.barronsFiles);
+            if (keys.length > 0)
+              window.location.href = CONFIG.barronsFiles[keys[0]];
+          });
+
+        document
+          .getElementById("actionContinue")
+          .addEventListener("click", () => {
+            if (STATE.lastVisited && STATE.lastVisited.url) {
+              window.location.href = STATE.lastVisited.url;
+            } else {
+              alert("NO QUEST LOG FOUND! CHOOSE AN ALPHABET MODULE BELOW.");
+            }
+          });
+
+        document
+          .getElementById("actionRandom")
+          .addEventListener("click", () => {
+            const pools = ["ws", "ba"];
+            const selectedPool =
+              pools[Math.floor(Math.random() * pools.length)];
+            let targetUrl = "";
+
+            if (selectedPool === "ws") {
+              const keys = Object.keys(CONFIG.wordSmartFiles);
+              const randomKey = keys[Math.floor(Math.random() * keys.length)];
+              targetUrl = CONFIG.wordSmartFiles[randomKey];
+            } else {
+              const keys = Object.keys(CONFIG.barronsFiles);
+              const randomKey = keys[Math.floor(Math.random() * keys.length)];
+              targetUrl = CONFIG.barronsFiles[randomKey];
+            }
+
+            if (targetUrl) window.location.href = targetUrl;
+          });
+      }
+
+      window.addEventListener("DOMContentLoaded", init);
+    </script>
+  </body>
+</html>
